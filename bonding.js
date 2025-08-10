@@ -204,7 +204,7 @@ describe("Bonding", function () {
         treasury.address,
         100000, //100
         "1000000000",
-        10000,
+        5000,
         100,
         agentFactory.target,
         parseEther("85000000"),
