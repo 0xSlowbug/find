@@ -318,8 +318,7 @@ describe("Bonding", function () {
 
 
   
-// Test that demonstrates MEV/frontrunning attack where slippage protection 
-// passes but user still receives less due to inefficient slippage
+// Test that demonstrates attack where slippage protection passes but user still receives less due to inefficient slippage
 it.only("should show that slippage check passes but user gets less due to sell fee", async function () {
   console.log("Test 4: Slippage and sell fee");
   const { virtualToken, bonding, fRouter } = await loadFixture(
@@ -337,7 +336,7 @@ it.only("should show that slippage check passes but user gets less due to sell f
     .connect(trader)
     .approve(fRouter.target, parseEther("10000"));
 
- // Give attacker tokens to perform frontrunning attack
+ // Give first user tokens to perform the trade
     await virtualToken.mint(attacker.address, parseEther("10000"));
   await virtualToken
     .connect(attacker)
@@ -377,7 +376,7 @@ it.only("should show that slippage check passes but user gets less due to sell f
     console.log("virtualBefore:", formatEther(virtualBefore));
 
 
-    // Calculate a small portion of attacker's balance to sell (frontrunning)
+    // Calculate a small portion of attacker's balance to sell 
     const attackerAgentBefore = await agentToken.balanceOf(attacker.address);
     const sellPortionOfAttacker = attackerAgentBefore / BigInt(1000);
     console.log("halfBalance:", formatEther(sellPortionOfAttacker));
@@ -388,7 +387,7 @@ it.only("should show that slippage check passes but user gets less due to sell f
     await agentToken.connect(attacker).approve(fRouter.target, attackerAgentBefore);
 
 
-    // FRONTRUNNING ATTACK: Attacker sells a small portion first to manipulate the price
+    // First user sells a small portion first to manipulate the price
     // This reduces the amount the trader will receive when they sell
 
       await bonding.connect(attacker).sell(
@@ -401,7 +400,7 @@ it.only("should show that slippage check passes but user gets less due to sell f
 
     
 
-   // Trader sets a slippage tolerance of 99% (expecting at least 9900 tokens back)
+   // Trader sets a slippage tolerance of 99% (expecting at least 9801 tokens back)
     const minAmount = parseEther("9801");
 
 
